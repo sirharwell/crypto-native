@@ -18,7 +18,7 @@ const logout = () => {
 
 export const registerUser = (user, history) => {
   return dispatch => {
-    axios.post(`${BASE_URL}/api/auth`, { ...user })
+    axios.post(`${BASE_URL}/api/auth`, user )
       .then(res => {
         const { data: { data: user }, headers } = res;
         dispatch(setHeaders(headers));
@@ -59,7 +59,7 @@ export const handleLogout = history => {
 
 export const handleLogin = (user, history) => {
   return dispatch => {
-    axios.post(`${BASE_URL}/api/auth/sign_in`, { ...user })
+    axios.post(`${BASE_URL}/api/auth/sign_in`, user )
       .then(res => {
         const { data: { data: user }, headers } = res;
         dispatch(setHeaders(headers));
