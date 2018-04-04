@@ -4,7 +4,7 @@ import { NativeRouter, Switch, Route } from 'react-router-native';
 import { Provider } from 'react-redux';
 import store from './store';
 import Auth from './components/Auth';
-import ProtectedRoute form './componenets/ProtectedRoute';
+import ProtectedRoute from './components/ProtectedRoute';
 import FetchUser from './components/FetchUser';
 import Coins from './components/Coins';
 
@@ -16,10 +16,10 @@ export default class App extends React.Component {
           <NativeRouter>
             <View style={styles.container}>
               <Switch>
-                <Route
+                <ProtectedRoute
                   exact
                   path="/"
-                  render={ props => <Auth {...props} type="Login"/> }
+                  component={Coins}
                 />
                 <Route
                   exact
