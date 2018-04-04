@@ -1,30 +1,42 @@
 import React from 'react';
 import {
   View,
-  Button,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  StyleSheet,
   Text,
   TextInput,
 } from 'react-native';
+import { Link } from 'react-router-native';
 
 class Auth extends React.Component {
-  state = { email: '', password: '', passwordConfirmation: '', error: '' }
+  state = {
+    email: '',
+    password: '',
+    passwordConfirmation: '',
+    error: '',
+  }
 
   handleSubmit = () => {
-    //TODO handle auth
-    this.setState({ email: '', password: '', passwordConfirmation: '' })
+    //TODO
+    this.setState({
+      email: '',
+      password: '',
+      passwordConfirmation: ''
+    })
   }
 
   canSubmit = () => {
-    const { email, password, passwordConfirmation } = this.state;
-    let submit = false;
+    const { email, password, passwordConfirmation } = this.state
+    let submit = false
     let error;
     if (email && password)
       submit = true
-    if (this.props.type === 'Register') {
+    if (type === 'Register') {
       if (!passwordConfirmation) {
         submit = false
       } else if ((passwordConfirmation && password) && passwordConfirmation !== password) {
-        error = 'Passwords Must Match'
+        error = 'Passswords Must Match'
         submit = false
         if (!this.state.error)
           this.setState({ error })
@@ -39,52 +51,99 @@ class Auth extends React.Component {
   }
 
   render() {
-    const { email, password, passwordConfirmation, error } = this.state;
+    const {
+      email,
+      password,
+      passwordConfirmation,
+      error,
+    } = this.state
+
+    const { type } = this.props;
+
+    const disabled = this.canSubmit();
     return (
-      <View>
-        { error !== '' && <Text style={styles.error}>{error}</Text> }
-        <Text>{ this.props.type }</Text>
+      <KeyboardAvoidingView
+        behavior="padding"
+        style={styles.container}
+      >
+        { error !== '' &&
+          <Text style={styles.error}>{error}</Text>
+        }
+        <Text style={styles.title}>{ type }</Text>
         <TextInput
+          style={styles.input}
           placeholder="Email"
-          autofocus
+          autoFocus
           autoCapitalize="none"
           autoCorrect={false}
           value={email}
           keyboardType="email-address"
-          onChangeText={(email) => this.setState({ email }) }
+          onChangeText={ (email) => this.setState({ email }) }
         />
         <TextInput
-          placeholder="Password"
+          style={styles.input}
+          placeholder="password"
           autoCapitalize="none"
           autoCorrect={false}
-          value={password}
           secureTextEntry={true}
-          onChangeText={(password) => this.setState({ password }) }
+          value={password}
+          onChangeText={ (password) => this.setState({ password }) }
         />
-        { this.props.type === 'Register' &&
+        { type === 'Register' &&
           <TextInput
-            placeholder="Password Confirmation"
+            style={styles.input}
+            placeholder="password confirmation"
             autoCapitalize="none"
             autoCorrect={false}
-            value={passwordConfirmation}
             secureTextEntry={true}
-            onChangeText={(passwordConfirmation) => this.setState({ passwordConfirmation }) }
+            value={passwordConfirmation}
+            onChangeText={ (passwordConfirmation) => this.setState({ passwordConfirmation }) }
           />
         }
-        { this.canSubmit() &&
-            <Button
-              onPress={this.handleSubmit}
-              title={this.props.type}
-              color="green"
-            />
-        }
-      </View>
+        <TouchableOpacity
+          onPress={ disabled ? f => f : this.handleSubmit }
+        >
+          <Text style={styles.button}>{type}</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
     )
   }
 }
 
-const styles = {
-  error: { color: 'red' }
-}
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'black',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  error: { color: 'red' },
+  title: {
+    color: 'white',
+    fontSize: 40,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  input: {
+    marginLeft: 10,
+    marginRight: 10,
+    height: 50,
+    marginBottom: 10,
+    backgroundColor: 'white',
+    width: 300,
+    fontSize: 20,
+  },
+  button: {
+    backgroundColor: 'blue',
+    color: 'white',
+    height: 40,
+    fontSize: 20,
+    lineHeight: 30,
+    width: 300,
+    marginLeft: 10,
+    marginRight: 10,
+    textAlign: 'center',
+  }
+})
 
-export default Auth;
+export default Auth
