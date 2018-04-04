@@ -2,12 +2,13 @@ import axios from 'axios';
 export const COINS = 'COINS';
 export const ADD_COIN = 'ADD_COIN';
 export const REMOVE_COIN = 'REMOVE_COIN';
+import { BASE_URL } from '../utils/urls';
 
 // dispatch(getCoins())
 // dispatch({ type: 'TEST', payload: 'hello' })
 export const getCoins = () => {
   return (dispatch) => {
-    axios.get('/api/coins')
+    axios.get(`${BASE_URL}/api/coins`)
       .then( ({ data: coins, headers }) =>
         dispatch({ type: COINS, coins, headers })
       )
@@ -16,7 +17,7 @@ export const getCoins = () => {
 
 export const addCoin = (coin) => {
   return (dispatch) => {
-    axios.post('/api/coins', { coin })
+    axios.post(`${BASE_URL}/api/coins`, { coin })
       .then( ({ data: coin, headers }) =>
         dispatch({ type: ADD_COIN, coin, headers })
       )
@@ -25,13 +26,9 @@ export const addCoin = (coin) => {
 
 export const removeCoin = (id) => {
   return (dispatch) => {
-    axios.put(`/api/coins/${id}`)
+    axios.put(`${BASE_URL}/api/coins/${id}`)
       .then( ({ headers }) =>
         dispatch({ type: REMOVE_COIN, id, headers })
       )
   }
 }
-
-
-
-

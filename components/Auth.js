@@ -8,6 +8,8 @@ import {
   TextInput,
 } from 'react-native';
 import { Link } from 'react-router-native';
+import { connect } from 'react-redux';
+import { handleLogin, registerUser } from '../actions/auth';
 
 class Auth extends React.Component {
   state = {
@@ -18,7 +20,13 @@ class Auth extends React.Component {
   }
 
   handleSubmit = () => {
-    //TODO
+    const { dispatch, type, history } = this.props;
+    const { email, password, passwordConfirmation } = this.state
+    if (type === 'Register')
+      dispatch(registerUser(email, password, passwordConfirmation, history))
+    else
+      dispatch(handleLogin(email, password, history))
+
     this.setState({
       email: '',
       password: '',
@@ -32,7 +40,7 @@ class Auth extends React.Component {
     let error;
     if (email && password)
       submit = true
-    if (type === 'Register') {
+    if (this.props.type === 'Register') {
       if (!passwordConfirmation) {
         submit = false
       } else if ((passwordConfirmation && password) && passwordConfirmation !== password) {
@@ -105,12 +113,21 @@ class Auth extends React.Component {
         >
           <Text style={styles.button}>{type}</Text>
         </TouchableOpacity>
+        <Link to={ type === 'Register' ? '/login' : '/register' }>
+          <Text style={styles.link}>
+            { type === 'Register' ? 'Login' : 'Register' }
+          </Text>
+        </Link>
       </KeyboardAvoidingView>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  link: {
+    color: 'lightblue',
+    fontSize: 20,
+  },
   container: {
     backgroundColor: 'black',
     flex: 1,
@@ -146,4 +163,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Auth
+export default connect()(Auth)
